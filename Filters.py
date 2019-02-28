@@ -48,3 +48,52 @@ class Filter:
                 img[i][l][1] = 0
                 img[i][l][2] = 0
         return img
+    
+    #   Retorna a imagem com as bandas em negativo
+    def negativeRGB(self, img):
+        for i in range(0, len(img)):
+            for l in range(0, len(img[0])):
+                img[i][l][0] = 255 - img[i][l][0]
+                img[i][l][1] = 255 - img[i][l][1]
+                img[i][l][2] = 255 - img[i][l][2]
+        return img
+    
+    #   Retorna a imagem com todos os pixels + c
+    def additiveBrightness(self, img, c):
+        for i in range(0, len(img)):
+            for l in range(0, len(img[0])):
+                if (img[i][l][0] + c > 255):
+                    img[i][l][0] = 255
+                else:
+                    img[i][l][0] = img[i][l][0] + c
+                
+                if (img[i][l][1] + c > 255):
+                    img[i][l][1] = 255
+                else:
+                    img[i][l][1] = img[i][l][1] + c
+                
+                if (img[i][l][2] + c > 255):
+                    img[i][l][2] = 255
+                else:
+                    img[i][l][2] = img[i][l][2] + c                         
+        return img
+    
+    #   Retorna a imagem com todos os pixels * c
+    def multiplicativeBrightness(self, img, c):
+        for i in range(0, len(img)):
+            for l in range(0, len(img[0])):
+                if (img[i][l][0] * c > 255):
+                    img[i][l][0] = 255
+                else:
+                    img[i][l][0] = img[i][l][0] * c
+                
+                if (img[i][l][1] * c > 255):
+                    img[i][l][1] = 255
+                else:
+                    img[i][l][1] = img[i][l][1] * c
+                
+                if (img[i][l][2] * c > 255):
+                    img[i][l][2] = 255
+                else:
+                    img[i][l][2] = img[i][l][2] * c                         
+        return img
