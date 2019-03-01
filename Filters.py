@@ -107,21 +107,27 @@ class Filter:
                     img[i][l][2] = aux                         
         return img
     
+    #   Aplica o filtro da mediana em uma copia da imagem
+    #   raio = o raio da mascara. ex: raio = 3, mascara 5x5
     def medianaRGB(self, img, raio):
         imgAux = copy(img)
         subMatrixB = []
         subMatrixG = []
         subMatrixR = []
+        #varre cada pixel da imagem com os limites sem extensao por zero
         for i in range(raio-1, len(img)-(raio-1)):
             for l in range(raio-1, len(img[0])-(raio-1)):
+                #submatriz para o filtro em cada pixel
                 subMatrix = img[i-raio+1:i+raio , l-raio+1:l+raio]
                 
+                #separa as informações das bandas
                 for a in range(0, len(subMatrix)):
                     for b in range(0, len(subMatrix[0])):
                         subMatrixB.append(subMatrix[a][b][0])
                         subMatrixG.append(subMatrix[a][b][1])
                         subMatrixR.append(subMatrix[a][b][2])
-                        
+                
+                #ordena os valores das bandas e pega o do meio para colocar na imagem
                 subMatrixB.sort()
                 subMatrixG.sort()
                 subMatrixR.sort()
@@ -131,6 +137,7 @@ class Filter:
                 subMatrixB = []
                 subMatrixG = []
                 subMatrixR = []
+        #corta as linhas e colunas que não participaram
         imgAux = imgAux[raio-1:len(imgAux)-(raio-1) , raio-1:len(imgAux[0])-(raio-1)]
         return imgAux
                     
