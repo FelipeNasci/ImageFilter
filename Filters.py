@@ -1,3 +1,6 @@
+from copy import copy
+import math
+
 #   A classe contem os filtros a serem aplicados na imagem
 class Filter:
 
@@ -103,3 +106,31 @@ class Filter:
                 else:
                     img[i][l][2] = aux                         
         return img
+    
+    def medianaRGB(self, img, raio):
+        imgAux = copy(img)
+        subMatrixB = []
+        subMatrixG = []
+        subMatrixR = []
+        for i in range(raio-1, len(img)-(raio-1)):
+            for l in range(raio-1, len(img[0])-(raio-1)):
+                subMatrix = img[i-raio+1:i+raio , l-raio+1:l+raio]
+                
+                for a in range(0, len(subMatrix)):
+                    for b in range(0, len(subMatrix[0])):
+                        subMatrixB.append(subMatrix[a][b][0])
+                        subMatrixG.append(subMatrix[a][b][1])
+                        subMatrixR.append(subMatrix[a][b][2])
+                        
+                subMatrixB.sort()
+                subMatrixG.sort()
+                subMatrixR.sort()
+                imgAux[i][l][0] = subMatrixB[math.trunc(len(subMatrixB)/2)]
+                imgAux[i][l][1] = subMatrixG[math.trunc(len(subMatrixG)/2)]
+                imgAux[i][l][2] = subMatrixR[math.trunc(len(subMatrixR)/2)]
+                subMatrixB = []
+                subMatrixG = []
+                subMatrixR = []
+        imgAux = imgAux[raio-1:len(imgAux)-(raio-1) , raio-1:len(imgAux[0])-(raio-1)]
+        return imgAux
+                    
