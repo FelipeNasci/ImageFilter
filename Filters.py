@@ -1,9 +1,45 @@
 from copy import copy
+import numpy as np
 import math
 
 #   A classe contem os filtros a serem aplicados na imagem
 class Filter:
-
+    
+    #   Retorna uma lista com cada elemento [Y, I, Q] convertido da img RGB
+    def rgbToYiq(self, img):
+        YIQ = np.empty((img.shape[0], img.shape[1], img.shape[2]), dtype=float)
+        for i in range(0, len(img)):
+            for l in range(0, len(img[0])):
+                Y = 0.299*img[i][l][2] + 0.587*img[i][l][1] + 0.114*img[i][l][0]
+                I = 0.596*img[i][l][2] - 0.274*img[i][l][1] - 0.322*img[i][l][0]
+                Q = 0.211*img[i][l][2] - 0.523*img[i][l][1] + 0.312*img[i][l][0]
+                YIQ[i][l] = [Y, I, Q]
+        return YIQ
+    
+    def yiqToRgb(self, YIQ):
+        RGB = np.empty((YIQ.shape[0], YIQ.shape[1], YIQ.shape[2]), dtype=np.uint8)
+        for i in range(0, len(YIQ)):
+            for l in range(0, len(YIQ[0])):
+                R = round(1.000*YIQ[i][l][0] + 0.956*YIQ[i][l][1] + 0.621*YIQ[i][l][2])
+                if (R > 255):
+                    R = 255
+                elif (R < 0):
+                    R = 0
+                    
+                G = round(1.000*YIQ[i][l][0] - 0.272*YIQ[i][l][1] - 0.647*YIQ[i][l][2])
+                if (G > 255):
+                    G = 255
+                elif (G < 0):
+                    G = 0
+                
+                B = round(1.000*YIQ[i][l][0] - 1.106*YIQ[i][l][1] + 1.703*YIQ[i][l][2])
+                if (B > 255):
+                    B = 255
+                elif (B < 0):
+                    B = 0        
+                RGB[i][l] = [B, G, R]
+        return RGB
+                    
     #   Define os tons de cinza com relacao a banda R
     def grayScaleR(self, img):
         for i in range(0, len(img)):
