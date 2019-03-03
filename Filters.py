@@ -5,7 +5,8 @@ import math
 #   A classe contem os filtros a serem aplicados na imagem
 class Filter:
     
-    #   Retorna uma lista com cada elemento [Y, I, Q] convertido da img RGB
+    #   Retorna um array numpy com as mesmas dimensoes da imagem
+    #   contendo os valores dos pixels convertidos em YIQ
     def rgbToYiq(self, img):
         YIQ = np.empty((img.shape[0], img.shape[1], img.shape[2]), dtype=float)
         for i in range(0, len(img)):
@@ -16,10 +17,13 @@ class Filter:
                 YIQ[i][l] = [Y, I, Q]
         return YIQ
     
+    #   Retorna um array numpy com as mesmas dimensoes do array YIQ
+    #   contendo os valores dos pixels convertidos em RGB
     def yiqToRgb(self, YIQ):
         RGB = np.empty((YIQ.shape[0], YIQ.shape[1], YIQ.shape[2]), dtype=np.uint8)
         for i in range(0, len(YIQ)):
             for l in range(0, len(YIQ[0])):
+                #necessario tratar os limites na volta para RGB
                 R = round(1.000*YIQ[i][l][0] + 0.956*YIQ[i][l][1] + 0.621*YIQ[i][l][2])
                 if (R > 255):
                     R = 255
@@ -36,7 +40,8 @@ class Filter:
                 if (B > 255):
                     B = 255
                 elif (B < 0):
-                    B = 0        
+                    B = 0
+                #BGR devido a opencv
                 RGB[i][l] = [B, G, R]
         return RGB
                     
@@ -101,6 +106,7 @@ class Filter:
     def additiveBrightness(self, img, c):
         for i in range(0, len(img)):
             for l in range(0, len(img[0])):
+                #aux usado pois o tipo do array e uint8 (0 - 255)
                 aux = img[i][l][0] + c
                 if (aux > 255):
                     img[i][l][0] = 255
@@ -124,6 +130,7 @@ class Filter:
     def multiplicativeBrightness(self, img, c):
         for i in range(0, len(img)):
             for l in range(0, len(img[0])):
+                #aux usado pois o tipo do array e uint8 (0 - 255)
                 aux = img[i][l][0] * c
                 if (aux > 255):
                     img[i][l][0] = 255
