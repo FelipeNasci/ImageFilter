@@ -6,5 +6,5 @@ filter = Filter()
 
 original = img.getImage()
 
-filter.bandB(original)
+filter.multiplicativeBrightness(original, 0)
 img.showImage("Image Band B", original)

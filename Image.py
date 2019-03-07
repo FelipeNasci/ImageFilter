@@ -11,7 +11,7 @@ class Image:
         self.r = 2
 
     def getImage(self):
-        img = cv2.imread("images/abstract1.jpg")
+        img = cv2.imread("images/macas.JPG")
         self.__class__.altura = img.shape[0]
         self.__class__.largura = img.shape[1]
         return img
