@@ -183,4 +183,59 @@ class Filter:
         #corta as linhas e colunas que não participaram
         imgAux = imgAux[raio-1:len(imgAux)-(raio-1) , raio-1:len(imgAux[0])-(raio-1)]
         return imgAux
+    
+    #   Aplica uma mascara em uma imagem, multiplicando cada valor da mascara
+    #   com o valor do pixel correspondente da imagem
+    def convolution(self, img, mask):
+        imgAux = copy(img)
+        raio = math.ceil(len(mask)/2)
+        opB, opG, opR = 0, 0, 0
+        maskI = 0 #representa os indices das linhas da mascara
+        maskJ = 0 #representa os indices das colunas da mascara
+        #varre cada pixel da imagem com os limites sem extensao por zero
+        for i in range(raio-1, len(img)-(raio-1)):
+            for l in range(raio-1, len(img[0])-(raio-1)):
+                #varre os indices da imagem ao redor do pixel de acordo com a mascara
+                for c in range(i-(raio-1), i+(raio)):
+                    for k in range(l-(raio-1), l+(raio)):
+                        #aplica a mascara em cada banda do pixel
+                        opB = opB + (img[c][k][0] * mask[maskI][maskJ])
+                        opG = opG + (img[c][k][1] * mask[maskI][maskJ])
+                        opR = opR + (img[c][k][2] * mask[maskI][maskJ])
+                        maskJ += 1
+                    maskJ = 0
+                    maskI += 1
+                maskI = 0
+                imgAux[i][l][0] = round(opB)
+                imgAux[i][l][1] = round(opG)
+                imgAux[i][l][2] = round(opR)
+                
+                #verificando os limites de RGB
+                if (opB > 255):
+                    imgAux[i][l][0] = 255
+                elif (opB < 0):
+                    imgAux[i][l][0] = 0
+                    
+                if (opG > 255):
+                    imgAux[i][l][1] = 255
+                elif (opG < 0):
+                    imgAux[i][l][1] = 0
+                    
+                if (opR > 255):
+                    imgAux[i][l][2] = 255
+                elif (opR < 0):
+                    imgAux[i][l][2] = 0
+                
+                opB, opG, opR = 0, 0, 0
+        return imgAux
+    
+    #   Define uma mascara da media e usa convolucao com essa mascara
+    def meanFilter(self, img, m):
+        mask = []
+        for i in range(0, m):
+            add = []
+            for j in range(0, m):
+                add.append(1/(m*m))
+            mask.append(add)
+        return self.convolution(img, mask)
                     
