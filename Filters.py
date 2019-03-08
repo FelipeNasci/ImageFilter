@@ -238,4 +238,18 @@ class Filter:
                 add.append(1/(m*m))
             mask.append(add)
         return self.convolution(img, mask)
+    
+    #   Define a mascara de sobel vertical e usa convolucao com essa mascara
+    #   para detectar contornos em imagens
+    def sobelVerticalFilter(self, img):
+        mask = [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]]
+        return self.convolution(img, mask)
+    
+    #   Define a mascara de sobel horizontal e usa convolucao com essa mascara
+    #   para detectar contornos em imagens
+    def sobelHorizontalFilter(self, img):
+        mask = [[-1, -2, -1], [0, 0, 0], [1, 2, 1]]
+        return self.convolution(img, mask)
+
+            
                     
