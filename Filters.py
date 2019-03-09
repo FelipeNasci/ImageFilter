@@ -356,7 +356,7 @@ class Filter:
             for j in range(0, m):
                 add.append(1/(m*m))
             mask.append(add)
-        return self.convolutionY(img, mask)
+        return self.yiqToRgb(self.convolutionY(img, mask))
     
     #   Define a mascara de sobel vertical e usa convolucao com essa mascara
     def sobelVerticalFilterRGB(self, img):
