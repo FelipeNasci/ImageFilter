@@ -4,7 +4,8 @@ from Filters import Filter
 img = Image()
 filter = Filter()
 
-original = img.getImage()
+original = img.getImage("abstract1.jpg")
+grayScale = filter.limiarizationRGB(original, 128)
 
-filter.bandB(original)
 img.showImage("Image Band B", original)
+img.showImage("Tons de cinza media 03 bandas", grayScale)
