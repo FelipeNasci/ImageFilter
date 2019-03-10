@@ -16,7 +16,7 @@ class Filter:
                 Q = 0.211*img[i][l][2] - 0.523*img[i][l][1] + 0.312*img[i][l][0]
                 YIQ[i][l] = [Y, I, Q]
         return YIQ
-    
+
     #   Retorna um array numpy com as mesmas dimensoes do array YIQ
     #   contendo os valores dos pixels convertidos em RGB
     def yiqToRgb(self, YIQ):
@@ -29,13 +29,13 @@ class Filter:
                     R = 255
                 elif (R < 0):
                     R = 0
-                    
+
                 G = round(1.000*YIQ[i][l][0] - 0.272*YIQ[i][l][1] - 0.647*YIQ[i][l][2])
                 if (G > 255):
                     G = 255
                 elif (G < 0):
                     G = 0
-                
+
                 B = round(1.000*YIQ[i][l][0] - 1.106*YIQ[i][l][1] + 1.703*YIQ[i][l][2])
                 if (B > 255):
                     B = 255
@@ -44,7 +44,7 @@ class Filter:
                 #BGR devido a opencv
                 RGB[i][l] = [B, G, R]
         return RGB
-                    
+
     #   Define os tons de cinza com relacao a banda
     def grayScale(self, img, band):
         GRAYSCALE = np.empty((img.shape[0], img.shape[1], img.shape[2]), dtype=np.uint8)
