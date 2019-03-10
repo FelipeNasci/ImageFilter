@@ -86,14 +86,27 @@ class Filter:
 ################################ NEGATIVO ##########################################
 ####################################################################################
     #   Retorna a imagem com as bandas em negativo
-    def negativeRGB(self, img):
+    def negative(self, img):
+        negative = np.empty((img.shape[0], img.shape[1], img.shape[2]), dtype=np.uint8)
         for i in range(0, len(img)):
             for l in range(0, len(img[0])):
-                img[i][l][0] = 255 - img[i][l][0]
-                img[i][l][1] = 255 - img[i][l][1]
-                img[i][l][2] = 255 - img[i][l][2]
-        return img
-    
+                negative[i][l][0] = 255 - img[i][l][0]
+                negative[i][l][1] = 255 - img[i][l][1]
+                negative[i][l][2] = 255 - img[i][l][2]
+        return negative
+
+    #   Retorna a imagem com as bandas em negativo
+    def negativeRGB(self, img, band):
+        negative = copy(img)
+
+        if band < 0 : band = 0
+        elif band > 2 : band = 2
+
+        for i in range(0, len(img)):
+            for l in range(0, len(img[0])):
+                negative[i][l][band] = 255 - img[i][l][band]
+        return negative
+
     #   Converte a imagem para a banda YIQ, aplica o negativo e converte e volta para RGB
     def negativeY(self, img):
         imgY = self.rgbToYiq(img)
@@ -434,7 +447,6 @@ class Filter:
                     imgAux[i][l][0] = 0
                     imgAux[i][l][1] = 0
                     imgAux[i][l][2] = 0
-                media = 0
         return imgAux
     
     #   Limiariza a banda Y a partir de um "m" dado
