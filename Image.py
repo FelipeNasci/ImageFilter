@@ -19,3 +19,7 @@ class Image:
     def showImage(self, nome, img):
         cv2.imshow(nome, img)           #   Exibir a imagem
         cv2.waitKey(0)                  #   Faz com que a imagem permaneça visivel até ser fechada
+        
+    def saveImage(self, name, img):
+        path = "outImages/{}.jpg".format(name)  #   Caminho onde a imagem será salva
+        cv2.imwrite(path, img)                  #   Armazenando a imagem
