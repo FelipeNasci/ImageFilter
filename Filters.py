@@ -125,24 +125,9 @@ class Filter:
         imgAux = copy(img)
         for i in range(0, len(img)):
             for l in range(0, len(img[0])):
-                #aux usado pois o tipo do array e uint8 (0 - 255)
-                aux = img[i][l][0] + c
-                if (aux > 255):
-                    imgAux[i][l][0] = 255
-                else:
-                    imgAux[i][l][0] = aux
-                
-                aux = img[i][l][1] + c
-                if (aux > 255):
-                    imgAux[i][l][1] = 255
-                else:
-                    imgAux[i][l][1] = aux
-
-                aux = img[i][l][2] + c
-                if (aux > 255):
-                    imgAux[i][l][2] = 255
-                else:
-                    imgAux[i][l][2] = aux                         
+                imgAux[i][l][0] = self.control(img[i][l][0] + c)    #B
+                imgAux[i][l][1] = self.control(img[i][l][1] + c)    #G
+                imgAux[i][l][2] = self.control(img[i][l][2] + c)    #R
         return imgAux
     
     #   Converte uma imagem para YIQ, aplica o brilho na banda Y e retorna para RGB
@@ -160,27 +145,15 @@ class Filter:
     
     #   Retorna a imagem com todos os pixels * c
     def multiplicativeBrightnessRGB(self, img, c):
+
+        if c < 0 : c = 1
         imgAux = copy(img)
+
         for i in range(0, len(img)):
             for l in range(0, len(img[0])):
-                #aux usado pois o tipo do array e uint8 (0 - 255)
-                aux = img[i][l][0] * c
-                if (aux > 255):
-                    imgAux[i][l][0] = 255
-                else:
-                    imgAux[i][l][0] = aux
-                
-                aux = img[i][l][1] * c
-                if (aux > 255):
-                    imgAux[i][l][1] = 255
-                else:
-                    imgAux[i][l][1] = aux
-                
-                aux = img[i][l][2] * c
-                if (aux > 255):
-                    imgAux[i][l][2] = 255
-                else:
-                    imgAux[i][l][2] = aux                         
+                imgAux[i][l][0] = self.control(img[i][l][0] * c)    #B
+                imgAux[i][l][1] = self.control(img[i][l][1] * c)    #G
+                imgAux[i][l][2] = self.control(img[i][l][2] * c)    #R
         return imgAux
     
     #   Converte uma imagem para YIQ, aplica o brilho na banda Y e retorna para RGB
@@ -285,26 +258,10 @@ class Filter:
                     maskJ = 0
                     maskI += 1
                 maskI = 0
-                imgAux[i][l][0] = round(opB)
-                imgAux[i][l][1] = round(opG)
-                imgAux[i][l][2] = round(opR)
-                
-                #verificando os limites de RGB
-                if (opB > 255):
-                    imgAux[i][l][0] = 255
-                elif (opB < 0):
-                    imgAux[i][l][0] = 0
-                    
-                if (opG > 255):
-                    imgAux[i][l][1] = 255
-                elif (opG < 0):
-                    imgAux[i][l][1] = 0
-                    
-                if (opR > 255):
-                    imgAux[i][l][2] = 255
-                elif (opR < 0):
-                    imgAux[i][l][2] = 0
-                
+                imgAux[i][l][0] = self.control(opB)
+                imgAux[i][l][1] = self.control(opG)
+                imgAux[i][l][2] = self.control(opR)
+
                 opB, opG, opR = 0, 0, 0
         return imgAux
     
@@ -388,24 +345,9 @@ class Filter:
         
         for i in range(0, len(img)):
             for l in range(0, len(img[0])):
-                final[i][l][0] = vertical[i][l][0] + horizontal[i][l][0]
-                final[i][l][1] = vertical[i][l][1] + horizontal[i][l][1]
-                final[i][l][2] = vertical[i][l][2] + horizontal[i][l][2]
-                
-                if (final[i][l][0] > 255):
-                    final[i][l][0] = 255
-                elif (final[i][l][0] < 0):
-                    final[i][l][0] = 0
-                    
-                if (final[i][l][1] > 255):
-                    final[i][l][1] = 255
-                elif (final[i][l][1] < 0):
-                    final[i][l][1] = 0
-                    
-                if (final[i][l][2] > 255):
-                    final[i][l][2] = 255
-                elif (final[i][l][2] < 0):
-                    final[i][l][2] = 0
+                final[i][l][0] = self.control(vertical[i][l][0] + horizontal[i][l][0])
+                final[i][l][1] = self.control(vertical[i][l][1] + horizontal[i][l][1])
+                final[i][l][2] = self.control(vertical[i][l][2] + horizontal[i][l][2])
         return final
     
     #   Soma os operadores vertical e horizontal de Sobel aplicados na banda Y 
@@ -419,7 +361,7 @@ class Filter:
         for i in range(0, len(imgY)):
             for l in range(0, len(imgY[0])):
                 final[i][l][0] = vertical[i][l][0] + horizontal[i][l][0]
-                
+
                 if (final[i][l][0] > 255):
                     final[i][l][0] = 255
                 elif (final[i][l][0] < 0):
@@ -461,5 +403,13 @@ class Filter:
                     imgYAux[i][l][0] = 0
         return self.yiqToRgb(imgYAux)
 ####################################################################################            
-            
-                    
+
+    #   Tratamento para valores acima de 255 e abaixo de 0
+    def control(self, valor):
+
+        if valor > 255:
+            return 255
+        elif valor < 0:
+            return 0
+
+        return round(valor)
